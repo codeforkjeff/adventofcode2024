@@ -7,10 +7,10 @@ These are my solutions, written in Java, using IntelliJ.
 
 ## How to build and run
 
-Install maven. Run `mvn package` to build the jar.
+Install maven. Run `mvn package appassembler:assemble` to build the application.
 
-Run the main program:
+Run the main program, supplying the classname you want to run as the argument:  
 
 ```sh
-java -jar target/adventofcode2024-1.0-SNAPSHOT.jar
+target/appassembler/bin/aoc2024 Day01Puzzle01
 ```
