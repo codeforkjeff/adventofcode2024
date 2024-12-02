@@ -7,12 +7,12 @@ import java.util.stream.Stream;
 public abstract class Problem {
 
     /**
-     * Solve this problem given the data in the input stream
+     * Solve this problem
      */
     public abstract String solve();
 
     /**
-     * Get the problem input as a Stream
+     * Get the problem input as a Stream of line strings
      */
     public Stream<String> getInput() {
         var dayStr = this.getClass().getSimpleName().toLowerCase().substring(0, 5);
@@ -25,9 +25,7 @@ public abstract class Problem {
     }
 
     /**
-     * run the solution for both the sample dataset and the real dataset,
-     * if the file for the latter is available. Real datasets
-     * are stored at this path: datasets/rosalind_[PROBLEM_ID].txt
+     * run the solution
      */
     public void run() {
         System.out.println(solve());
