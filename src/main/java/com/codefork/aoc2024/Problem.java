@@ -15,8 +15,8 @@ public abstract class Problem {
      * Get the problem input as a Stream
      */
     public Stream<String> getInput() {
-        var name = this.getClass().getSimpleName().toLowerCase().substring(0, 5);
-        var path = String.format("/%s/input", name);
+        var dayStr = this.getClass().getSimpleName().toLowerCase().substring(0, 5);
+        var path = String.format("/%s/input", dayStr);
         var stream = this.getClass().getResourceAsStream(path);
         if(stream != null) {
             return new BufferedReader(new InputStreamReader(stream)).lines();
