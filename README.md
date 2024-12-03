@@ -5,7 +5,15 @@ See https://adventofcode.com/2024
 
 These are my solutions, written in Java, using IntelliJ.
 
-## How to build and run
+## How to run this
+
+### Get the input files
+
+The input files in `src/main/resources` are encrypted. If you're not me, you'll need
+to download the relevant input files from the AoC website and replace the encrypted ones
+in that directory.
+
+### Run the code
 
 You can run the Part* classes within IntelliJ interactively.
 
@@ -20,7 +28,3 @@ target/appassembler/bin/aoc2024 2 1
 # runs day 3, both parts
 target/appassembler/bin/aoc2024 3
 ```
-
-The input files in `src/main/resources` are encrypted. If you're not me, you'll need
-to download the input files yourself from the AoC website and replace the encrypted ones
-in that directory.
