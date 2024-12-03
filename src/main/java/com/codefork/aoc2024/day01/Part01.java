@@ -1,10 +1,12 @@
-package com.codefork.aoc2024;
+package com.codefork.aoc2024.day01;
+
+import com.codefork.aoc2024.Problem;
 
 import java.util.ArrayList;
 import java.util.PriorityQueue;
 import java.util.stream.IntStream;
 
-public class Day01Puzzle01 extends Problem {
+public class Part01 extends Problem {
 
     @Override
     public String solve() {
@@ -34,7 +36,7 @@ public class Day01Puzzle01 extends Problem {
     }
 
     public static void main(String[] args) {
-        new Day01Puzzle01().run();
+        new Part01().run();
     }
 
 }

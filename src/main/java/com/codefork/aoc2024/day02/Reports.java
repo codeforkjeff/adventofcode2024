@@ -1,10 +1,10 @@
-package com.codefork.aoc2024;
+package com.codefork.aoc2024.day02;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class Day02 {
+public class Reports {
 
     public static List<Integer> createReport(String line) {
         return Arrays.stream(line.split(" "))

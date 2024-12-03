@@ -2,6 +2,7 @@ package com.codefork.aoc2024;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 import java.util.stream.Stream;
 
 public abstract class Problem {
@@ -15,7 +16,8 @@ public abstract class Problem {
      * Get the problem input as a Stream of line strings
      */
     public Stream<String> getInput() {
-        var dayStr = this.getClass().getSimpleName().toLowerCase().substring(0, 5);
+        var packageNameParts = this.getClass().getPackageName().split("\\.");
+        var dayStr = packageNameParts[packageNameParts.length - 1];
         var path = String.format("/%s/input", dayStr);
         var stream = this.getClass().getResourceAsStream(path);
         if(stream != null) {

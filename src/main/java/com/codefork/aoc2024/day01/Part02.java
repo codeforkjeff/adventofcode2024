@@ -1,10 +1,12 @@
-package com.codefork.aoc2024;
+package com.codefork.aoc2024.day01;
+
+import com.codefork.aoc2024.Problem;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
-public class Day01Puzzle02 extends Problem {
+public class Part02 extends Problem {
 
     @Override
     public String solve() {
@@ -23,7 +25,7 @@ public class Day01Puzzle02 extends Problem {
     }
 
     public static void main(String[] args) {
-        new Day01Puzzle02().run();
+        new Part02().run();
     }
 
 }

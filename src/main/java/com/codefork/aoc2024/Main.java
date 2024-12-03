@@ -7,6 +7,7 @@ import javax.tools.StandardLocation;
 import javax.tools.ToolProvider;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -62,24 +63,39 @@ public class Main {
 
     public static void main(String[] args) {
         if (args.length < 1) {
-            System.out.println("Usage: aoc2024 CLASS_NAME");
+            System.out.println("Usage: aoc2024 DAY_NUMBER PART_NUMBER");
             System.exit(1);
         }
-        String problemId = args[0];
+        var day = Integer.parseInt(args[0]);
+        var parts = new ArrayList<Integer>();
+        if(args.length > 1) {
+            parts.add(Integer.parseInt(args[1]));
+        } else {
+            parts.add(1);
+            parts.add(2);
+        }
 
-        Map<String, Problem> problems = null;
-        try {
-            problems = getProblems();
-        } catch(IOException e) {
-            System.out.println("Error loading problems: " + e);
-            System.exit(1);
-        }
-        var problem = problems.get(problemId);
-        if(problem == null) {
-            System.out.println("Error: Problem " + problemId + " doesn't exist ");
-            System.exit(1);
-        }
-        problem.run();
+        for(var part : parts) {
+            var className = Main.class.getPackageName() + String.format(".day%02d.Part%02d", day, part);
+            System.out.println("Running " + className);
+
+            Class clazz = null;
+            try {
+                clazz = Class.forName(className);
+            } catch(ClassNotFoundException e) {
+                System.err.println("ERROR: Couldn't find class, does it exist?");
+                System.exit(1);
+            }
+
+            Problem problem = null;
+            try {
+                problem = (Problem) clazz.getConstructors()[0].newInstance();
+            } catch (InstantiationException | InvocationTargetException | IllegalAccessException e) {
+                System.out.println(e);
+                throw new RuntimeException(e);
+            }
+            problem.run();
+       }
     }
 
 }
