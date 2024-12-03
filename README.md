@@ -7,12 +7,18 @@ These are my solutions, written in Java, using IntelliJ.
 
 ## How to build and run
 
-Install maven. Run `mvn package appassembler:assemble` to build the application.
+You can run the Part* classes within IntelliJ interactively.
 
-Run the main program, supplying the classname you want to run as the argument:  
+To run using the command line, install maven, then run `mvn package appassembler:assemble`
+to build the application.
+
+Run the main program, supplying the day and part you want to run as arguments:  
 
 ```sh
-target/appassembler/bin/aoc2024 Day01Puzzle01
+# runs day 2, part 1 
+target/appassembler/bin/aoc2024 2 1
+# runs day 3, both parts
+target/appassembler/bin/aoc2024 3
 ```
 
 The input files in `src/main/resources` are encrypted. If you're not me, you'll need
