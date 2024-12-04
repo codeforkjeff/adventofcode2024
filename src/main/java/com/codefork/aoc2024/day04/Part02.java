@@ -2,7 +2,6 @@ package com.codefork.aoc2024.day04;
 
 import com.codefork.aoc2024.Problem;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,8 +16,8 @@ import static com.codefork.aoc2024.day04.Part01.rowsToDiagonals;
  * and store just the "A" which is the intersecting part. Then we cna find the intersection
  * of the A's found in both sets of diagonals (in each direction) to determine the X's.
  *
- * This isn't a great solution, but it builds off the strategy I used in part 1. Had I known
- * where part 2 was going, I think I would have done part 1 differently.
+ * This isn't a great solution, but it builds off the strategy I used in part 1. Had I
+ * foreseen where part 2 was going, I think I would have done part 1 differently.
  */
 public class Part02 extends Problem {
 
@@ -78,12 +77,14 @@ public class Part02 extends Problem {
             rows.stream().map(row -> row.reversed().stream().toList()).toList()
         );
 
-        var set1 = new HashSet<>(findInView(diagonals));
-        var set2 = new HashSet<>(findInView(otherDirectionDiagonals));
+        var set = new HashSet<>(findInView(diagonals));
 
-        set1.retainAll(set2);
+        var intersection = findInView(otherDirectionDiagonals)
+                .stream()
+                .filter(letter -> set.contains(letter))
+                .toList();
 
-        return String.valueOf(set1.size());
+        return String.valueOf(intersection.size());
     }
 
     public static void main(String[] args) {
