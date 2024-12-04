@@ -29,4 +29,6 @@ Run the main program, supplying the day and part you want to run as arguments:
 target/appassembler/bin/aoc2024 2 1
 # runs day 3, both parts
 target/appassembler/bin/aoc2024 3
+# run everything
+target/appassembler/bin/aoc2024 all
 ```
