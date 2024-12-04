@@ -3,6 +3,7 @@ package com.codefork.aoc2024.day02;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.IntStream;
 
 public class Reports {
 
@@ -16,14 +17,10 @@ public class Reports {
      * @return a list of difference values for each level change in the report
      */
     public static List<Integer> getLevelDiffs(List<Integer>levels) {
-        var diffs = new ArrayList<Integer>();
-        for (var i = 0; i < levels.size(); i++) {
-            if (i > 0) {
-                var diff = levels.get(i) - levels.get(i - 1);
-                diffs.add(diff);
-            }
-        }
-        return diffs;
+        return IntStream
+                .range(1, levels.size())
+                .boxed()
+                .map(i -> levels.get(i) - levels.get(i - 1)).toList();
     }
 
     public static boolean isSafe(String line, boolean tolerant) {
@@ -32,10 +29,10 @@ public class Reports {
     }
 
     public static boolean isSafe(List<Integer> report, boolean tolerant) {
-        var diffs = getLevelDiffs(report);
-        var numDiffs = diffs.size();
-        var countValidIncreasing = diffs.stream().filter(d -> d > 0 && d <= 3).count();
-        var countValidDecreasing = diffs.stream().filter(d -> d < 0 && d >= -3).count();
+        final var diffs = getLevelDiffs(report);
+        final var numDiffs = diffs.size();
+        final var countValidIncreasing = diffs.stream().filter(d -> d > 0 && d <= 3).count();
+        final var countValidDecreasing = diffs.stream().filter(d -> d < 0 && d >= -3).count();
 
         //System.out.printf("%s %s %s %s %s%n", tolerant, report, diffs, countValidIncreasing, countValidDecreasing);
 
@@ -47,13 +44,15 @@ public class Reports {
             // I tried a lot of shenanigans to try to intelligently remove a level
             // but both the selection logic and anticipating effects is trickier than it might seem.
             // so I ended up just brute-forcing it. ¯\_(ツ)_/¯
-            for(var i = 0; i < report.size(); i++) {
-                var reportCopy = new ArrayList<>(report);
-                reportCopy.remove(i);
-                if(isSafe(reportCopy, false)) {
-                    return true;
-                }
-            }
+
+            // is there a safe report among all the possibilities of having a level removed?
+            return IntStream
+                    .range(0, report.size())
+                    .anyMatch(i -> {
+                        var reportCopy = new ArrayList<>(report);
+                        reportCopy.remove(i);
+                        return isSafe(reportCopy, false);
+                    });
         }
         return false;
     }

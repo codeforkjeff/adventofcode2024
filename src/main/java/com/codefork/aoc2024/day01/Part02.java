@@ -2,24 +2,26 @@ package com.codefork.aoc2024.day01;
 
 import com.codefork.aoc2024.Problem;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class Part02 extends Problem {
 
     @Override
     public String solve() {
-        var list = new ArrayList<Integer>();
-        var list2freq = new HashMap<Integer, Integer>();
+        final var lines = getInput().map(line ->
+            Arrays.stream(line.split("\\s+")).map(Integer::valueOf).toList()
+        ).toList();
 
-        getInput().forEach(line -> {
-            var parts = Arrays.stream(line.split("\\s+")).map(Integer::valueOf).toArray(Integer[]::new);
-            list.add(parts[0]);
-            list2freq.put(parts[1], list2freq.getOrDefault(parts[1], 0) + 1);
-        });
+        final var list2freq = lines.stream().map(line -> line.get(1)).collect(Collectors.toMap(
+                (item) -> item,
+                (item) -> 1,
+                Integer::sum));
 
-        var similarity = list.stream().reduce(0, (acc, n) -> acc + (n * list2freq.getOrDefault(n, 0)));
+        final var list1 = lines.stream().map(List::getFirst);
+
+        final var similarity = list1.reduce(0, (acc, n) -> acc + (n * list2freq.getOrDefault(n, 0)));
 
         return String.valueOf(similarity);
     }

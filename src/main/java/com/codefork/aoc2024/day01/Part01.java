@@ -11,7 +11,8 @@ public class Part01 extends Problem {
     @Override
     public String solve() {
         // transform input into a list of heaps, one for each "column" in the input file
-        var lists = getInput().reduce(new ArrayList<PriorityQueue<Integer>>(),
+        final var lists = getInput().collect(
+                () -> new ArrayList<PriorityQueue<Integer>>(),
                 (acc, line) -> {
                     var parts = line.split("\\s+");
                     for (var i = 0; i < parts.length; i++) {
@@ -20,14 +21,10 @@ public class Part01 extends Problem {
                         }
                         acc.get(i).add(Integer.valueOf(parts[i]));
                     }
-                    return acc;
                 },
-                (acc1, acc2) -> {
-                    acc1.addAll(acc2);
-                    return acc1;
-                });
+                ArrayList::addAll);
 
-        var totalDistance = IntStream
+        final var totalDistance = IntStream
                 .range(0, lists.get(0).size()).reduce(0, (acc, i) ->
                         acc + Math.abs(lists.get(1).remove() - lists.get(0).remove())
                 );

@@ -3,7 +3,9 @@
 
 See https://adventofcode.com/2024
 
-These are my solutions, written in Java, using IntelliJ.
+I've been doing Java on and off for 25 years (!). My goal with this year's AoC is to write "modern Java"
+as much as possible. This means using the newer APIs, streams, lambdas, functional programming idioms,
+records, etc.
 
 ## How to run this
 

@@ -6,7 +6,7 @@ public class Part01 extends Problem {
 
     @Override
     public String solve() {
-        return String.valueOf(Computer.sumInstructionResults(getInput(), false));
+        return String.valueOf(ComputerState.sumInstructionResults(getInput(), false));
     }
 
     public static void main(String[] args) {
