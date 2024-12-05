@@ -8,8 +8,6 @@ import java.util.List;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import static com.codefork.aoc2024.day04.Part01.rowsToDiagonals;
-
 /**
  * Strategy = store the input as Letter records containing an x, y coordinate.
  * We can reuse the diagonals code from part 1 to find all the occurrences of "MAS"
@@ -60,9 +58,9 @@ public class Part02 extends Problem {
     public String solve(Stream<String> data) {
         var rows = Letter.createLetterRows(data.toList());
 
-        var diagonals = rowsToDiagonals(rows);
+        var diagonals = WordSearch.rowsToDiagonals(rows);
 
-        var otherDirectionDiagonals = rowsToDiagonals(
+        var otherDirectionDiagonals = WordSearch.rowsToDiagonals(
             rows.stream().map(row -> row.reversed().stream().toList()).toList()
         );
 
