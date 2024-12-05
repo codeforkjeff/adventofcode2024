@@ -1,6 +1,7 @@
 package com.codefork.aoc2024.day04;
 
 import com.codefork.aoc2024.Problem;
+import com.codefork.aoc2024.util.Assert;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,14 +30,14 @@ public class Part01 extends Problem {
     // look for all occurrences, forward and reverse, in a view
     public static int frequencyInView(List<List<Character>> view) {
         return view.stream().reduce(0, (acc, seq) -> {
-            var seqStr = charListToStr(seq);
-            var revStr = charListToStr(seq.reversed());
+            final var seqStr = charListToStr(seq);
+            final var revStr = charListToStr(seq.reversed());
             return acc + frequency(XMAS, seqStr) + frequency(XMAS, revStr);
         }, Integer::sum);
     }
 
     public static List<List<Character>> pivotRowsToColumns(List<List<Character>> rows) {
-        var numCols = rows.get(0).size();
+        final var numCols = rows.get(0).size();
         return IntStream
                 .range(0, numCols)
                 .mapToObj(colIdx ->
@@ -50,13 +51,13 @@ public class Part01 extends Problem {
      * adjusting the indices calculations through trial and error.
      */
     public static <T> List<List<T>> rowsToDiagonals(List<List<T>> rows) {
-        var numCols = rows.get(0).size();
-        var numRows = rows.size();
+        final var numCols = rows.get(0).size();
+        final var numRows = rows.size();
         // create first set of diagonals by moving across columns, and for each column, iterating along diagonal
-        var diags = IntStream
+        final var diags = IntStream
                 .range(0, numCols)
                 .mapToObj(colCounter -> {
-                    var seq = IntStream
+                    final var seq = IntStream
                             .range(0, colCounter + 1)
                             .mapToObj(rowCounter -> {
                                 var rowIdx = rowCounter;
@@ -70,10 +71,10 @@ public class Part01 extends Problem {
                 })
                 .toList();
         // create second set of diagonals by moving across rows on the right edge, and for each row, iterating along diagonal
-        var diags2 = IntStream
+        final var diags2 = IntStream
                 .range(1, numRows)
                 .mapToObj(rowCounter -> {
-                    var seq = IntStream
+                    final var seq = IntStream
                             .iterate(numCols - 1, colIdx -> colIdx >= numRows - (numRows - rowCounter), colIdx -> colIdx - 1)
                             .mapToObj(colCounter -> {
                                 var rowIdx = rowCounter + (numCols - colCounter) - 1;
@@ -89,25 +90,24 @@ public class Part01 extends Problem {
         return Stream.concat(diags.stream(), diags2.stream()).toList();
     }
 
-    @Override
-    public String solve() {
+    public String solve(Stream<String> data) {
         // generate machine-analyzable "views" of the word search grid,
         // where a view is a list of a list of characters
 
         // "normal" view: rows and columns
-        var rows = getInput()
+        final var rows = data
                 .filter(line -> !line.isEmpty())
                 .map(line -> line.chars().mapToObj(c -> (char) c).toList())
                 .toList();
 
         // view by columns: this is a pivotted version of rows
-        var columns = pivotRowsToColumns(rows);
+        final var columns = pivotRowsToColumns(rows);
 
         // view by diagonals: list of the diagonal sequences of varying lengths
-        var diagonals = rowsToDiagonals(rows);
+        final var diagonals = rowsToDiagonals(rows);
 
         // view by diagonals in the other direction:
-        var otherDirectionDiagonals = rowsToDiagonals(
+        final var otherDirectionDiagonals = rowsToDiagonals(
                 rows.stream().map(row -> row.reversed().stream().toList()).toList()
         );
 
@@ -115,6 +115,12 @@ public class Part01 extends Problem {
                 + frequencyInView(columns)
                 + frequencyInView(diagonals)
                 + frequencyInView(otherDirectionDiagonals));
+    }
+
+    @Override
+    public String solve() {
+        Assert.assertEquals("18", solve(getSampleInput()));
+        return solve(getInput());
     }
 
     public static void main(String[] args) {

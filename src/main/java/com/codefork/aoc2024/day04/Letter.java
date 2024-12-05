@@ -1,6 +1,7 @@
 package com.codefork.aoc2024.day04;
 
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public record Letter(Character ch, int x, int y) {
@@ -12,7 +13,7 @@ public record Letter(Character ch, int x, int y) {
         return IntStream
                 .range(0, input.size())
                 .mapToObj(rowIdx -> {
-                    var row = input.get(rowIdx);
+                    final var row = input.get(rowIdx);
                     return IntStream
                             .range(0, row.length())
                             .mapToObj(colIdx ->
@@ -20,6 +21,16 @@ public record Letter(Character ch, int x, int y) {
                             .toList();
                 })
                 .toList();
+    }
+
+    /**
+     * @param seq
+     * @param s
+     * @return true if the list of Letter records represents the string s
+     */
+    public static boolean letterListEquals(List<Letter> seq, String s) {
+        final var seqStr = seq.stream().map(letter -> String.valueOf(letter.ch())).collect(Collectors.joining());
+        return s.equals(seqStr);
     }
 
 }
