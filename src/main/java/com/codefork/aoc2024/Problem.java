@@ -16,6 +16,9 @@ public abstract class Problem {
 
     public void checkEncrypted(String path) {
         var stream = this.getClass().getResourceAsStream(path);
+        if(stream == null) {
+            throw new RuntimeException(String.format("File doesn't exist: %s", path));
+        }
         var headerSize = 9;
         var header = new byte[headerSize];
         var buf = new BufferedInputStream(stream);
