@@ -5,10 +5,6 @@ import com.codefork.aoc2024.util.Assert;
 
 import java.util.stream.Stream;
 
-// TODO: 538 is too low
-// 842 is too low
-// 1876 is too high
-// 1878 is wrong
 public class Part02 extends Problem {
 
     public String solve(Stream<String> data) {
