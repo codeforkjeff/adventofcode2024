@@ -35,7 +35,9 @@ target/appassembler/bin/aoc2024 all
 
 ## Journal
 
-12/6/2024 - So far I've been making good use of the functional programming features in Java.
+### 12/6/2024
+
+So far I've been making good use of the functional programming features in Java.
 But as the problems get more complicated (I'm at day 6), it's starting to get difficult to achieve
 purity. Some pain points:
 
@@ -49,7 +51,9 @@ in the code and does a lot of copying in memory.
 
 - Some conveniences in streams are missing, like "foldLeft" and "mapWithIndex".
 
-12/9/2024 - In the course of being a bit irritated by trying to do pure FP in Java, I discovered [vavr](https://vavr.io/),
+### 12/9/2024
+
+In the course of being a bit irritated by trying to do pure FP in Java, I discovered [vavr](https://vavr.io/),
 a library of functional data structures that seems largely inspired by Scala. People have strong opinions about 
 it. As a concept, it looks pretty fantastic to me. I don't think I'll use it for AoC, at least not this
 time around, but it's a nice discovery.
