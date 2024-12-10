@@ -53,3 +53,7 @@ in the code and does a lot of copying in memory.
 a library of functional data structures that seems largely inspired by Scala. People have strong opinions about 
 it. As a concept, it looks pretty fantastic to me. I don't think I'll use it for AoC, at least not this
 time around, but it's a nice discovery.
+
+I almost always have to rewrite/refactor the part 1 solution to answer part 2 of puzzles. For day 10, however,
+I had already written code to find all the unique trails for part 1, so I literally didn't need to do anything
+except count them for part 2. I'll take that win!
