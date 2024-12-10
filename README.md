@@ -48,3 +48,8 @@ the standard structures like ArrayLists and HashMaps without mutating them ends 
 in the code and does a lot of copying in memory.
 
 - Some conveniences in streams are missing, like "foldLeft" and "mapWithIndex".
+
+12/9/2024 - In the course of being a bit irritated by trying to do pure FP in Java, I discovered [vavr](https://vavr.io/),
+a library of functional data structures that seems largely inspired by Scala. People have strong opinions about 
+it. As a concept, it looks pretty fantastic to me. I don't think I'll use it for AoC, at least not this
+time around, but it's a nice discovery.
