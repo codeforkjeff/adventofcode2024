@@ -61,3 +61,9 @@ not this time around, but it's a nice discovery.
 I almost always have to rewrite/refactor the part 1 solution to answer part 2 of puzzles. For day 10, however,
 I had already written code to find all the unique trails for part 1, so I literally didn't need to do anything
 except count them for part 2. I'll take that win!
+
+### 12/11/2024
+
+Day 11 part 2 is the first problem I had to sleep on. Initially I thought it was one of those where you don't actually
+need to iterate, you could pre-calculate the resulting number of stones at a given evolution. I'm still not sure if that
+could actually work. In the end, I simply figured out a more efficient representation for iteration. It worked nicely.
