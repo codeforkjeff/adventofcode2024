@@ -33,7 +33,7 @@ public class Main {
                     if(runAll) {
                         return;
                     } else {
-                        System.err.println("ERROR: Couldn't find class, does it exist?");
+                        System.err.println("ERROR: Couldn't find class " + className + ", does it exist?");
                         System.exit(1);
                     }
                 }
