@@ -67,3 +67,16 @@ except count them for part 2. I'll take that win!
 Day 11 part 2 is the first problem I had to sleep on. Initially I thought it was one of those where you don't actually
 need to iterate, you could pre-calculate the resulting number of stones at a given evolution. I'm still not sure if that
 could actually work. In the end, I simply figured out a more efficient representation for iteration. It worked nicely.
+
+### 12/13/2024
+
+I've been dreading the type of problem that came up in Day 13, where the only viable solution isn't based on
+time- or spacing-saving algorithms, but on calculation. I won't spoil it here, but I'll just say it took me 
+a little while to write out the equation.
+
+I often declare records as members of the class when 1) they're only used by that class, 2) there's a bunch of them
+that are related and work together, 3) it's nice to see them all in one place instead of in separate files.
+Today I randomly discovered
+[local classes](https://docs.oracle.com/javase/tutorial/java/javaOO/localclasses.html) and
+[records](https://docs.oracle.com/en/java/javase/17/language/records.html). This allows you to scope, say, an intermediate record for a stream transformation, to a single method
+and avoid clutter at the class level. Pretty cool!
