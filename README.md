@@ -80,3 +80,7 @@ Today I randomly discovered
 [local classes](https://docs.oracle.com/javase/tutorial/java/javaOO/localclasses.html) and
 [records](https://docs.oracle.com/en/java/javase/17/language/records.html). This allows you to scope, say, an intermediate record for a stream transformation, to a single method
 and avoid clutter at the class level. Pretty cool!
+
+### 12/15/2024
+
+Day 14 Part 2 had me stumped, at least for now. Moving on to Day 15.
