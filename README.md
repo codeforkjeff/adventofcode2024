@@ -84,3 +84,17 @@ and avoid clutter at the class level. Pretty cool!
 ### 12/15/2024
 
 Day 14 Part 2 had me stumped, at least for now. Moving on to Day 15.
+
+### 12/18/2024
+
+This is the part of AoC when I start to fall behind. =P
+
+Day 16 took me several days to do, when I could find time to work on it. I did actually intuit
+what the best solution for part 1 probably was, but I was lazy and wasted time banging out a
+naive solution, hoping it would be good enough. It wasn't; it worked for the sample data, but it
+would run out of memory on the real input. So in the long run, it cost me more time than if I
+went with the right solution from the start.
+
+The biggest stumbling block was adapting the well-known algorithm (I won't give it away here,
+it's in the code) to handle the direction of the reindeer in the maze, and accounting for that
+in the cost of the weighted edges of the graph.
