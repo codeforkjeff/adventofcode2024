@@ -70,7 +70,9 @@ public abstract class Problem {
      * run the solution
      */
     public void run() {
+        var start = System.currentTimeMillis();
         System.out.println(solve());
+        System.out.printf("Took %dms%n", System.currentTimeMillis() - start);
     }
 
 }
