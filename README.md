@@ -98,3 +98,14 @@ went with the right solution from the start.
 The biggest stumbling block was adapting the well-known algorithm (I won't give it away here,
 it's in the code) to handle the direction of the reindeer in the maze, and accounting for that
 in the cost of the weighted edges of the graph.
+
+### 12/19/2024
+
+Day 17 part 2 was... oof. I skipped it immediately, since I didn't want to get stuck 
+on how to "reverse" those operations, which I think is how I should approach it. It'll require
+a longer block of time on another day.
+
+Considering how hard the problems are getting, I solved days 18 and 19 pretty damn quickly. 
+Both of those were the ideal programming puzzles, in my view. Apply the right algorithms for
+both parts and you're done. No tricks in the input data, no having to be clever about what 
+the rules imply and calculating a "shortcut" solution. Just nice efficient coding.
