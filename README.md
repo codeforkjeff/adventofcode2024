@@ -109,3 +109,9 @@ Considering how hard the problems are getting, I solved days 18 and 19 pretty da
 Both of those were the ideal programming puzzles, in my view. Apply the right algorithms for
 both parts and you're done. No tricks in the input data, no having to be clever about what 
 the rules imply and calculating a "shortcut" solution. Just nice efficient coding.
+
+### 12/20/2024
+
+Day 20 was the first puzzle where a recursive method caused a StackOverflowError
+when running it on the real input. This is yet another limit of trying to do pure FP in Java:
+it doesn't have [tail call optimization](https://en.wikipedia.org/wiki/Tail_call).
