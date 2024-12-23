@@ -10,6 +10,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -48,13 +49,17 @@ public class Part01 extends Problem {
             }
             throw new RuntimeException("buttons aren't adjacent in getAction=" + this + "," + target);
         }
+
+        public String toString() {
+            return symbol + "(" + pos.x() + "," + pos.y() + ")";
+        }
     }
 
     public record Move(Button from, Button to) {
 
     }
 
-    public record ShortestPaths(Button source, Map<Button, Integer> dist, Map<Button, Button> prev) {
+    public record ShortestPaths(Button source, Map<Button, Integer> dist, Map<Button, Set<Button>> prev) {
 
         // Dijkstra, yet again.
         // this is probably overkill since there's not weighted edges in the graph
@@ -65,7 +70,7 @@ public class Part01 extends Problem {
 
             }
             var dist = new HashMap<Button, Integer>();
-            var prev = new HashMap<Button, Button>();
+            var prev = new HashMap<Button, Set<Button>>();
             var q = new HashSet<Button>();
 
             for(var button : buttons) {
@@ -88,41 +93,66 @@ public class Part01 extends Problem {
 
                 for(var v : neighborsInQ) {
                     var alt = dist.get(u) + 1;
-                    if (alt < dist.get(v)) {
+                    if (alt <= dist.get(v)) {
                         dist.put(v, alt);
-                        prev.put(v, u);
+                        if(!prev.containsKey(v)) {
+                            prev.put(v, new HashSet<>());
+                        }
+                        prev.get(v).add(u);
                     }
                 }
             }
             return new ShortestPaths(source, dist, prev);
         }
 
-        public List<Button> getPath(Button target) {
-            var s = new LinkedList<Button>();
-            var u = target;
-            if(prev.containsKey(u) || u.equals(source)) {
-                while(u != null) {
-                    s.addFirst(u);
-                    u = prev.get(u);
+        /**
+         * get all the possible paths for navigating from source to target
+         */
+        public List<List<Button>> getPaths(Button target) {
+            var paths = new ArrayList<List<Button>>();
+            paths.add(new LinkedList<>(List.of(target)));
+            var finalPaths = new ArrayList<List<Button>>();
+            while(!paths.isEmpty()) {
+                var newPaths = new ArrayList<List<Button>>();
+                for(var path : paths) {
+                    var u = path.getFirst();
+                    if(prev.containsKey(u)){
+                        var allPrev = prev.get(u);
+                        for(var prevItem : allPrev) {
+                            var newPath = new LinkedList<>(path);
+                            newPath.addFirst(prevItem);
+                            newPaths.add(newPath);
+                        }
+
+                    } else if (u.equals(source)) {
+                        finalPaths.add(path);
+                    }
                 }
+                paths = newPaths;
             }
-            return s;
+            //System.out.println(source + "->" + target + ", returning " + finalPaths.size() + " finalPaths=" + finalPaths);
+            return finalPaths;
         }
 
-        public String getPresses(Button target) {
-            var path = getPath(target);
-            var result = IntStream.range(1, path.size()).boxed()
-                    .collect(foldLeft(
-                            StringBuilder::new,
-                            (acc, i) -> {
-                                var button = path.get(i);
-                                var prevButton = path.get(i-1);
-                                var action = prevButton.getAction(button);
-                                acc.append(action);
-                                return acc;
-                            })
-                    );
-            return result.append("A").toString();
+        public List<String> getPossiblePressSequences(Button target) {
+            var paths = getPaths(target);
+            return paths.stream()
+                    .map(path -> {
+                        return IntStream.range(1, path.size()).boxed()
+                                .collect(foldLeft(
+                                        StringBuilder::new,
+                                        (acc, i) -> {
+                                            var button = path.get(i);
+                                            var prevButton = path.get(i - 1);
+                                            var action = prevButton.getAction(button);
+                                            acc.append(action);
+                                            return acc;
+                                        })
+                                )
+                                .append("A")
+                                .toString();
+                        })
+                    .toList();
         }
     }
 
@@ -131,7 +161,7 @@ public class Part01 extends Problem {
 
         private final Map<String, Button> buttonsMap;
 
-        private final Map<Move, String> movesToPaths;
+        private final Map<Move, List<String>> movesToPaths;
 
         public Keypad(List<Button> buttons) {
             this.buttons = buttons;
@@ -143,8 +173,8 @@ public class Part01 extends Problem {
             this.movesToPaths = createShortestPaths();
         }
 
-        private Map<Move, String> createShortestPaths() {
-            Map<Move, String> result = new HashMap<>();
+        private Map<Move, List<String>> createShortestPaths() {
+            Map<Move, List<String>> result = new HashMap<>();
 
             // generate graph of adjacent buttons
             var graph = new HashMap<Button, List<Button>>();
@@ -171,7 +201,8 @@ public class Part01 extends Problem {
                 var shortestPaths = ShortestPaths.create(buttons, graph, button1);
                 var otherButtons = buttons.stream().filter(b -> !b.equals(button1)).toList();
                 for (var button2 : otherButtons) {
-                    var presses = shortestPaths.getPresses(button2);
+                    var presses = shortestPaths.getPossiblePressSequences(button2);
+                    //System.out.println("move " + button1 + "->" + button2 + " adding presses=" + presses);
                     result.put(new Move(button1, button2), presses);
                 }
             }
@@ -182,7 +213,7 @@ public class Part01 extends Problem {
             return buttonsMap;
         }
 
-        public Map<Move, String> getMovesToPaths() {
+        public Map<Move, List<String>> getMovesToPaths() {
             return movesToPaths;
         }
     }
@@ -197,22 +228,38 @@ public class Part01 extends Problem {
             this.current = this.keypad.getButtonsMap().get(current);
         }
 
-        public String getPresses(String seq) {
-            StringBuilder presses = new StringBuilder();
+        public List<String> getPossiblePressSequences(String seq) {
+            List<StringBuilder> pressSeqList = new ArrayList<>();
+            pressSeqList.add(new StringBuilder());
             var c = current;
             while(!seq.isEmpty()) {
+                var newPressSeqList = new ArrayList<StringBuilder>();
                 var symbol = seq.substring(0, 1);
                 var next = keypad.getButtonsMap().get(symbol);
                 if(next.equals(c)) {
-                    presses.append("A");
+                    for(var pressSeq : pressSeqList) {
+                        pressSeq.append("A");
+                        newPressSeqList.add(pressSeq);
+                    }
                 } else {
                     var move = new Move(c, next);
-                    presses.append(keypad.getMovesToPaths().get(move));
+                    var paths = keypad.getMovesToPaths().get(move);
+                    for(var pressSeq : pressSeqList) {
+                        for(var path : paths) {
+                            var copy = new StringBuilder(pressSeq.toString());
+                            copy.append(path);
+                            //System.out.println("move " + move + ", appended " + path + ", copy is: " + copy);
+                            newPressSeqList.add(copy);
+                        }
+                    }
                 }
+                pressSeqList = newPressSeqList;
                 c = next;
                 seq = seq.substring(1);
             }
-            return presses.toString();
+            return pressSeqList.stream()
+                    .map(StringBuilder::toString)
+                    .toList();
         }
 
     }
@@ -281,31 +328,59 @@ public class Part01 extends Problem {
                 new DirectionalKeypadNavigator("A")
         );
 
-        record SeqWithFinalPresses(String seq, String finalPresses) {
-
-        }
-
-        var total = data
+        var complexities = data
                 .map(seq -> {
-                    var presses = seq;
+                    System.out.println("doing " + seq);
+                    // run each sequence through a list of navigators, collecting results
+                    var pressesList = List.of(seq);
                     for (var navigator : navigators) {
-                        presses = navigator.getPresses(presses);
-                        var aCount = presses.chars().filter(ch -> ((char) ch) == 'A').count();
-                        System.out.println(presses + " num A's=" + aCount);
-                    }
-                    return new SeqWithFinalPresses(seq, presses);
-                })
-                .map(s -> s.finalPresses.length() * getNumericPortion(s.seq))
-                .mapToInt(i -> i)
-                .sum();
+                        var newPressesList = new ArrayList<String>();
+                        for (var presses : pressesList) {
+                            var possiblePresses = navigator.getPossiblePressSequences(presses);
+                            for (var p : possiblePresses) {
+                                System.out.println(p);
+                            }
+                            newPressesList.addAll(possiblePresses);
+                        }
 
+//                        var lengthCounts = newPressesList.stream()
+//                                .collect(Collectors.toMap(
+//                                        String::length,
+//                                        s -> 1,
+//                                        Integer::sum
+//                                ));
+//                        for(var len : lengthCounts.keySet().stream().sorted(Integer::compareTo).toList()) {
+//                            System.out.println("press sequences with len = " + len +
+//                                    " occurred " + lengthCounts.get(len) + " times");
+//                        }
+
+                        // group press sequences by their "signature" (where/which elements repeat)
+
+
+                        System.out.println(navigator + " found " + newPressesList.size() + " possible presses");
+
+                        pressesList = newPressesList;
+                    }
+                    System.out.println("found " + pressesList.size() + " possible presses for last navigator");
+                    // find the shortest path of the LAST navigator only
+                    var shortestPress = pressesList.stream()
+                            .min(Comparator.comparingInt(String::length))
+                            .orElseThrow();
+                    System.out.println("shortest press found is "+ shortestPress.length() + " long");
+                    var result = shortestPress.length() * getNumericPortion(seq);
+                    return result;
+                })
+                .toList();
+
+        var total = complexities.stream().mapToInt(i -> i).sum();
         return String.valueOf(total);
     }
 
     @Override
     public String solve() {
         Assert.assertEquals("126384", solve(getSampleInput()));
-        return solve(getInput());
+        //return solve(getInput());
+        return "";
     }
 
     public static void main(String[] args) {
