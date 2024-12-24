@@ -144,3 +144,20 @@ head against a wall. Which I did for WEEKS for some problems during AoC 2018. Wh
 (still later that day)
 
 Hey I figured out day 14!
+
+### 1/3/2025
+
+I returned to day 21 and finished part 2. My initial naive attempt tried to generate the full strings of
+keypad presses, which, unsurprisingly, caused out of memory errors. Then I had the idea to represent the
+press sequences in a way that used less memory. After adding a shortcut after each robot's loop
+iteration, it finishes in about 2 minutes on my laptop.
+
+I suspect this is one of those puzzles where there's a pattern in the growth of the sequences, and you can
+calculate the minimum size at n iterations without actually having to loop through them. I'm not that clever,
+sadly.
+
+I'm still proud of my solution. It was tricky to model properly, and there were lots of hairy one-to-many
+transformations. I think it's pretty readable and easy to understand what's happening.
+
+I'm running out of steam, so when I get around to it, I'm going to cheat for days 17 and 24 and see how someone
+else solved them. Implementation is still work and learning!
