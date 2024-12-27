@@ -126,13 +126,13 @@ Usually when this happens, I "align" the two solutions so they re-use the same c
 after finishing part 2 but the approaches are so algorithmically different that I decided it wasn't worth
 the energy. 
 
-(time passes)
+(later that day)
 
 Well, I've finished a solid pass through all the problems. Here's what I need to return to:
  
 ```
 Day 14 part 2 = finding the christmas tree
-Day 17 part 2 = [quine](https://en.wikipedia.org/wiki/Quine_(computing))-ish problem
+Day 17 part 2 = quine-ish problem 
 Day 21 part 2 = keypad problem
 Day 24 part 2 = find 4 swaps of logic gates to make addition work
 ```
@@ -141,6 +141,6 @@ I think I can do 14 and 21, if I put my mind to it. Honestly, I'm not sure about
 For those, I may ask my friend Rob who's also doing AoC this year, or look at reddit, instead of beating my
 head against a wall. Which I did for WEEKS for some problems during AoC 2018. Which was not healthy.
 
-(more time passes)
+(still later that day)
 
 Hey I figured out day 14!
