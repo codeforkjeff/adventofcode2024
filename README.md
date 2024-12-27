@@ -115,3 +115,13 @@ the rules imply and calculating a "shortcut" solution. Just nice efficient codin
 Day 20 was the first puzzle where a recursive method caused a StackOverflowError
 when running it on the real input. This is yet another limit of trying to do pure FP in Java:
 it doesn't have [tail call optimization](https://en.wikipedia.org/wiki/Tail_call).
+
+### 12/26/2024
+
+Unsurprisingly, I didn't finish AoC by or on Christmas. I do think this December's progress has
+been better than my last attempt in 2018, at least. We'll see how long it takes me to wrap this all up. 
+
+Day 23 was one of those problems where I took an entirely different approach in part 2 than part 1.
+Usually when this happens, I "align" the two solutions so they re-use the same code. I started to do that
+after finishing part 2 but the approaches are so algorithmically different that I decided it wasn't worth
+the energy. 
