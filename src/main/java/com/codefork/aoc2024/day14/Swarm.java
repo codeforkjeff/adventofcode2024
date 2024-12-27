@@ -2,8 +2,11 @@ package com.codefork.aoc2024.day14;
 
 import com.codefork.aoc2024.util.Maps;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -14,7 +17,11 @@ import static com.codefork.aoc2024.util.FoldLeft.foldLeft;
 public record Swarm(List<Robot> robots, int width, int height) {
 
     public record Position(int x, int y) {
-
+        public boolean isAdjacent(Position other) {
+            var xDiff = Math.abs(other.x() - x);
+            var yDiff = Math.abs(other.y() - y);
+            return xDiff + yDiff <= 1;
+        }
     }
 
     public record Velocity(int dx, int dy) {
@@ -116,58 +123,41 @@ public record Swarm(List<Robot> robots, int width, int height) {
                 ));
     }
 
-    /**
-     * testing for part 2: try smaller sections
-     */
-    public Map<Integer, Integer> getCustomSectionCounts() {
-        var byQuadrant = robots.stream()
-                .collect(Collectors.groupingBy(
-                        (robot) -> {
-                            if (robot.position().y() < height / 3) {
-                                if (robot.position().x() < width / 2) {
-                                    return 0;
-                                } else if (robot.position().x() > width / 2) {
-                                    return 1;
-                                }
-                            } else if (robot.position().y() > height / 3 && robot.position().y() < (height / 3) * 2) {
-                                if (robot.position().x() < width / 2) {
-                                    return 2;
-                                } else if (robot.position().x() > width / 2) {
-                                    return 3;
-                                }
-                            } else if (robot.position().y() > (height / 3) * 2) {
-                                if (robot.position().x() < width / 2) {
-                                    return 4;
-                                } else if (robot.position().x() > width / 2) {
-                                    return 5;
-                                }
-                            }
-                            // put the robots on the center lines in a separate group
-                            // that we'll discard
-                            return DISCARD;
-                        })
-                );
-        return byQuadrant.entrySet().stream()
-                .filter(entry -> entry.getKey() != DISCARD)
-                .collect(Collectors.toMap(
-                        Map.Entry::getKey,
-                        entry -> {
-                            // count occupied positions rather than robots, since they can be stacked, and we only
-                            // care about what they look like from above
-                            record Pos(int x, int y) {
-                            }
-                            var list = entry.getValue();
-                            var occupiedPositions = list.stream()
-                                    .map(robot -> new Pos(robot.position().x(), robot.position().y()))
-                                    .collect(Collectors.toSet());
-                            return occupiedPositions.size();
-                        },
-                        Integer::sum
-                ));
-    }
-
     public int getSafetyFactor() {
         return getQuadrantCounts().entrySet().stream()
                 .reduce(1, (acc, entry) -> acc * entry.getValue(), Integer::sum);
     }
+
+    /**
+     * Look for groups of adjacent robots. this returns a list of sets of positions, not
+     * the Robots themselves, because we only care about positions. We actually only care about the
+     * existence of clusters, not even the positions.
+     */
+    public List<Set<Position>> getAdjacentClusters() {
+        var clusters = new ArrayList<Set<Position>>();
+        for(var robot : robots()) {
+            var position = robot.position();
+
+            var newClusters = new ArrayList<Set<Swarm.Position>>();
+
+            var mergedCluster = new HashSet<Position>();
+            for(var cluster : clusters) {
+                var belongs = cluster.stream().anyMatch(p -> p.isAdjacent(position));
+                if(belongs) {
+                    mergedCluster.addAll(cluster);
+                    mergedCluster.add(position);
+                } else {
+                    newClusters.add(cluster);
+                }
+            }
+            if(mergedCluster.isEmpty()) {
+                mergedCluster.add(position);
+            }
+            newClusters.add(mergedCluster);
+
+            clusters = newClusters;
+        }
+        return clusters;
+    }
+
 }
