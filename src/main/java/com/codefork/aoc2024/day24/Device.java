@@ -1,7 +1,12 @@
 package com.codefork.aoc2024.day24;
 
+import java.sql.Array;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
@@ -93,4 +98,63 @@ public record Device(Map<String, Wire> namesToWires) {
     public int getWire(String wireName) {
         return namesToWires.get(wireName).value(this);
     }
+
+    public boolean hasWire(String wireName) {
+        return namesToWires().containsKey(wireName);
+    }
+
+    public Device swap(String name1, String name2) {
+        var newNamesToWires = new HashMap<>(namesToWires());
+        var wire1 = newNamesToWires.get(name1);
+        var wire2 = newNamesToWires.get(name2);
+        newNamesToWires.put(name1, wire2);
+        newNamesToWires.put(name2, wire1);
+        return new Device(newNamesToWires);
+    }
+
+    /** get only the gate dependencies (not the x and y wire values) */
+    public Set<String> getGateDependencies(String name) {
+        var toVisit = new ArrayList<String>();
+        var visited = new HashSet<String>();
+        toVisit.add(name);
+        var dependencies = new HashSet<String>();
+        while(!toVisit.isEmpty()) {
+            var wireName = toVisit.getFirst();
+            if(visited.contains(wireName)) {
+                toVisit.removeFirst();
+                continue;
+            }
+            if(wireName.startsWith("x") || wireName.startsWith("y")) {
+                toVisit.removeFirst();
+                visited.add(wireName);
+                continue;
+            }
+            dependencies.add(wireName);
+            var wire = namesToWires().get(wireName);
+            switch (wire) {
+                case Or w -> {
+                    toVisit.add(w.op1.name());
+                    toVisit.add(w.op2.name());
+                }
+                case And w -> {
+                    toVisit.add(w.op1.name());
+                    toVisit.add(w.op2.name());
+                }
+                case Xor w -> {
+                    toVisit.add(w.op1.name());
+                    toVisit.add(w.op2.name());
+                }
+                case NamedValue v -> {
+                    // do nothing
+                }
+                case LiteralValue v -> {
+                    // do nothing
+                }
+            }
+            toVisit.removeFirst();
+            visited.add(wireName);
+        }
+        return dependencies;
+    }
+
 }
