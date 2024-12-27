@@ -11,7 +11,14 @@ import static com.codefork.aoc2024.util.FoldLeft.foldLeft;
 public class Grid {
 
     public interface Reducer<T> {
-        T apply(T t, int x, int y, String u);
+        /**
+         * @param acc accumulator
+         * @param x x coordinate
+         * @param y y coordinate
+         * @param ch character, as a String
+         * @return final accumulator value
+         */
+        T apply(T acc, int x, int y, String ch);
     }
 
     /**
