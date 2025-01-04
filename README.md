@@ -160,4 +160,4 @@ I'm still proud of my solution. It was tricky to model properly, and there were 
 transformations. I think it's pretty readable and easy to understand what's happening.
 
 I'm running out of steam, so when I get around to it, I'm going to cheat for days 17 and 24 and see how someone
-else solved them. Implementation is still work and learning!
+else solved them. Implementation is still helpful for learning!
