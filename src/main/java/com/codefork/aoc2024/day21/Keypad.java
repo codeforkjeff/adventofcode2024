@@ -17,7 +17,7 @@ public class Keypad {
             new Button(">", new Position(2, 1))
     );
 
-    // directional keypad: this is used by both navigator
+    // directional keypad: this is used by both navigators
     public static final Keypad dirKeypad = new Keypad(dirKeypadButtons);
 
     private final List<Button> buttons;
@@ -65,7 +65,7 @@ public class Keypad {
             var shortestPaths = ShortestPaths.create(buttons, graph, button1);
             var otherButtons = buttons.stream().filter(b -> !b.equals(button1)).toList();
             for (var button2 : otherButtons) {
-                var presses = shortestPaths.getPossiblePressSequences(button2);
+                var presses = shortestPaths.getPathsAsStrings(button2);
                 //System.out.println("move " + button1 + "->" + button2 + " adding presses=" + presses);
                 result.put(new Move(button1, button2), presses);
             }
@@ -77,10 +77,6 @@ public class Keypad {
         }
 
         return result;
-    }
-
-    public Map<String, Button> getButtonsMap() {
-        return buttonsMap;
     }
 
     public Button getButton(String symbol) {

@@ -89,10 +89,10 @@ public record ShortestPaths(Button source, Map<Button, Integer> dist, Map<Button
 
     /**
      * turns a path (list of Buttons from source to target) into a list of the directional
-     * symbol sequences needed to get from source to target. This is probably not be represented
+     * symbol sequences needed to get from source to target. This is probably not best represented
      * as a String, but that's how I implemented it early on and I didn't want to refactor it.
      */
-    public List<String> getPossiblePressSequences(Button target) {
+    public List<String> getPathsAsStrings(Button target) {
         var paths = getPaths(target);
         return paths.stream()
                 .map(path ->

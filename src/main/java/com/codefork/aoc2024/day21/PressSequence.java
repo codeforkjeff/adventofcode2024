@@ -5,7 +5,8 @@ import java.util.Map;
 
 /**
  * Represents a sequence of button actions to perform.
- * Order doesn't actually matter in a press sequence, only the moves do.
+ * Order doesn't actually matter in a press sequence, only the moves do,
+ * so we use a Map of Moves to their counts
  */
 public record PressSequence(Map<Move, Long> moves) {
 
