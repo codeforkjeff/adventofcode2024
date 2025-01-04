@@ -150,7 +150,7 @@ Hey I figured out day 14!
 I returned to day 21 and finished part 2. My initial naive attempt tried to generate the full strings of
 keypad presses, which, unsurprisingly, caused out of memory errors. Then I had the idea to represent the
 press sequences in a way that used less memory. After adding a shortcut after each robot's loop
-iteration, it finishes in about 2 minutes on my laptop.
+iteration, it finishes in about 1.5 minutes on my laptop.
 
 I suspect this is one of those puzzles where there's a pattern in the growth of the sequences, and you can
 calculate the minimum size at n iterations without actually having to loop through them. I'm not that clever,

@@ -2,7 +2,7 @@ package com.codefork.aoc2024.day21;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -35,11 +35,12 @@ public class ShipLock {
                 .map(seq -> {
                     // run each sequence through a list of navigators, using results from each iteration
                     // as input for the next one.
-                    var pressSeqSet = Set.of(PressSequence.create(navigators.getFirst().getKeypad(), seq));
+                    List<PressSequence> pressSeqs = new ArrayList<PressSequence>();
+                    pressSeqs.add(PressSequence.create(navigators.getFirst().getKeypad(), seq));
                     for (var navigator : navigators) {
                         var newPressSeqSet = new HashSet<PressSequence>();
                         // one to many results
-                        for (var pressSeq : pressSeqSet) {
+                        for (var pressSeq : pressSeqs) {
                             var possiblePresses = navigator.getPossiblePressSequences(pressSeq);
                             newPressSeqSet.addAll(possiblePresses);
                         }
@@ -48,11 +49,11 @@ public class ShipLock {
 
                         // we don't need to carry over every result to the next iteration, only the shortest ones.
                         // this shortcut is necessary to get the solution to finish at all
-                        var truncated = newPressSeqSet.stream().filter(set -> set.length() == shortestLength).collect(Collectors.toSet());
-                        pressSeqSet = truncated;
+                        var truncated = newPressSeqSet.stream().filter(set -> set.length() == shortestLength).toList();
+                        pressSeqs = truncated;
                     }
                     //System.out.println("found " + pressSeqSet.size() + " possible presses for last navigator");
-                    var shortestLength = pressSeqSet.stream().map(PressSequence::length).mapToLong(i -> i).min().orElseThrow();
+                    var shortestLength = pressSeqs.stream().map(PressSequence::length).mapToLong(i -> i).min().orElseThrow();
                     //System.out.println("shortest press found is "+ shortestLength + " long");
                     var result = shortestLength * getNumericPortion(seq);
                     return result;
