@@ -24,6 +24,9 @@ public class ShipLock {
     }
 
     public static long calculateSumOfComplexities(Stream<String> data, int numRobots) {
+        record WithLength(PressSequence seq, long length) {
+        }
+
         // create our layered navigators
         var navigators = new ArrayList<KeypadNavigator>();
         navigators.add(new DoorKeypadNavigator());
@@ -45,15 +48,25 @@ public class ShipLock {
                             newPressSeqSet.addAll(possiblePresses);
                         }
 
-                        var shortestLength = newPressSeqSet.stream().map(PressSequence::length).mapToLong(i-> i).min().orElseThrow();
+                        // calculate lengths just once, since it's a slightly expensive operation
+                        var withLengths = newPressSeqSet.stream()
+                                .map(ps -> new WithLength(ps, ps.length()))
+                                .toList();
+
+                        var shortestLength = withLengths.stream()
+                                .mapToLong(WithLength::length)
+                                .min()
+                                .orElseThrow();
 
                         // we don't need to carry over every result to the next iteration, only the shortest ones.
                         // this shortcut is necessary to get the solution to finish at all
-                        var truncated = newPressSeqSet.stream().filter(set -> set.length() == shortestLength).toList();
+                        var truncated = withLengths.stream()
+                                .filter(item -> item.length() == shortestLength)
+                                .map(WithLength::seq)
+                                .toList();
                         pressSeqs = truncated;
                     }
-                    //System.out.println("found " + pressSeqSet.size() + " possible presses for last navigator");
-                    var shortestLength = pressSeqs.stream().map(PressSequence::length).mapToLong(i -> i).min().orElseThrow();
+                    var shortestLength = pressSeqs.getFirst().length();
                     //System.out.println("shortest press found is "+ shortestLength + " long");
                     var result = shortestLength * getNumericPortion(seq);
                     return result;
