@@ -43,9 +43,13 @@ public class ShipLock {
                     for (var navigator : navigators) {
                         var newPressSeqSet = new HashSet<PressSequence>();
                         // one to many results
-                        for (var pressSeq : pressSeqs) {
-                            var possiblePresses = navigator.getPossiblePressSequences(pressSeq);
-                            newPressSeqSet.addAll(possiblePresses);
+
+                        // parallelization on my laptop w/ 16 virtual cores cuts runtime by 1/3, from 83s to 57s
+                        var results = pressSeqs.parallelStream()
+                                .map(navigator::getPossiblePressSequences)
+                                .toList();
+                        for(var result : results) {
+                            newPressSeqSet.addAll(result);
                         }
 
                         // calculate lengths just once, since it's a slightly expensive operation

@@ -7,7 +7,7 @@ import java.util.stream.Stream;
 public class Part02 extends Problem {
 
     public String solve(Stream<String> data) {
-        System.out.println("TODO: This takes ~1.5 minutes to run, needs to be optimized");
+        System.out.println("TODO: This takes ~1 minute to run, needs to be optimized");
         return String.valueOf(ShipLock.calculateSumOfComplexities(data, 25));
     }
 
