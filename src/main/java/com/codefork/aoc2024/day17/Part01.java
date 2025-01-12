@@ -10,7 +10,7 @@ public class Part01 extends Problem {
     public String solve(Stream<String> data) {
         var computer = Computer.parse(data);
         var finalState = computer.run();
-        return finalState.output();
+        return finalState.getOutputAsString();
     }
 
     @Override

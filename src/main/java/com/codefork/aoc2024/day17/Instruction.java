@@ -74,7 +74,7 @@ public enum Instruction {
         public Computer apply(Operand operand, Computer computer) {
             var operandEvaluated = operand.eval(computer);
             if(computer.a() != 0) {
-                return computer.withIp(operandEvaluated);
+                return computer.withIp((int) operandEvaluated);
             }
             return computer.advanceIp();
         }
@@ -111,7 +111,7 @@ public enum Instruction {
         public Computer apply(Operand operand, Computer computer) {
             var operandEvaluated = operand.eval(computer);
             var result = operandEvaluated % 8;
-            return computer.appendOutput(result).advanceIp();
+            return computer.appendOutput((int) result).advanceIp();
         }
     },
     bdv {

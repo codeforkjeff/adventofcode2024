@@ -1,12 +1,12 @@
 package com.codefork.aoc2024.day17;
 
 public final class Literal extends Operand {
-    public Literal(int value) {
+    public Literal(long value) {
         super(value);
     }
 
     @Override
-    public int eval(Computer computer) {
+    public long eval(Computer computer) {
         return value;
     }
 }
