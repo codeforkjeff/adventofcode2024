@@ -16,10 +16,11 @@ public class Part01 extends Problem {
                 .sorted()
                 .toList()
                 .reversed();
+        var evaluator = new Device.Evaluator(device);
         var result = zNames.stream().collect(
                 foldLeft(
                         () -> 0L,
-                        (acc, name) -> (acc << 1) | device.getWire(name)
+                        (acc, name) -> (acc << 1) | evaluator.get(name)
                 )
         );
         return String.valueOf(result);

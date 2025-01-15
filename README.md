@@ -161,3 +161,37 @@ transformations. I think it's pretty readable and easy to understand what's happ
 
 I'm running out of steam, so when I get around to it, I'm going to cheat for days 17 and 24 and see how someone
 else solved them. Implementation is still helpful for learning!
+
+### 1/14/2025
+
+Warning: spoilers for day 24 part 2 below.
+
+I read some reddit posts to help me solve this one. Many of them suggested visualizing the graph of wires
+to better grasp what's happening, so I output a [graphviz](https://graphviz.org/) dot file and stared at it for a
+while.
+
+It gave me the idea to build a list of dependencies of the incorrect z wires, and filter out any wires that contributed
+to correct z wires: this would reduce the swap candidates to just a handful of wires that I could viably test by trying
+every possible combination of 4 swaps. This was misguided, however, since a "correct" z wire is dependent on the inputs,
+and the solution has to work with ANY values in the x and y wires. Even using randomized x and y values to figure out
+likely dependents eliminated too many candidates.
+
+So I gave up solving it on my own, and dove more deeply into the reddit discussions. Most of them focus on
+understanding the ["full adder"](https://en.wikipedia.org/wiki/Adder_(electronics)#Full_adder): the puzzle input
+basically constructs one of these (except for the 4 swapped gates, of course). Interestingly, many people solved this
+puzzle without code: they did it using pen and paper, and/or by inspecting a visual graph by eye and noticing how it
+"obviously" deviated from the composition of gates for a full adder. But this wasn't obvious to me. I could see the
+general shape of the graph and the places where it seemed off, but beyond that, it gave me a headache to try to
+identify what the configuration of the full adder should look like for each z wire.
+
+I ended up implementing [a solution by someone](https://www.reddit.com/r/adventofcode/comments/1hneuf0/comment/m41ms44/)
+who used a brute force approach I thought was pretty clever: set up a bunch of test devices with randomized x and y
+values, find a swap that results in the most improvement for all of them, and repeat until you find the set of 4 swaps
+that works for every test device. After adding caching to the evaluation of wire values, my solution ran in only 35s
+(the author reported it taking 2.5 mins on their machine). More details are in the code.
+
+I suppose slogging through it was worth the insight into how mathematical addition works at the level of logical gates
+(you need a carry bit!), even if I didn't use that knowledge for the actual solution.
+
+Anyway, day 17 part 2 is the last remaining puzzle for me. Like day 24, it involves implementing a computer. Ugh,
+I dislike these types of problems so much.
