@@ -128,7 +128,7 @@ public enum Instruction {
         @Override
         public Computer apply(Operand operand, Computer computer) {
             var operandEvaluated = operand.eval(computer);
-            var result = computer.a() / (int) Math.pow(2, operandEvaluated);
+            var result = computer.a() / (long) Math.pow(2, operandEvaluated);
             return computer.withB(result).advanceIp();
         }
     },

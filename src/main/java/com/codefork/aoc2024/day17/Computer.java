@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -93,40 +92,33 @@ public record Computer(long a, long b, long c, int ip, List<Integer> program, Li
             var instruction = opcodesToInstructions.get(opcode);
             var operand = instruction.parseOperand(rawOperand);
             state = instruction.apply(operand, state);
+//            System.out.printf("%s raw_op=%s A=%s B=%s C=%s ip=%s out=%s%n",
+//                    instruction.name(),
+//                    rawOperand,
+//                    Long.toBinaryString(state.a),
+//                    Long.toBinaryString(state.b),
+//                    Long.toBinaryString(state.c),
+//                    state.ip,
+//                    state.output);
         }
         return state;
     }
 
-    /**
-     * keep running until output matches the program; if it starts to mismatch at any point,
-     * return an empty optional
-     */
-    public Optional<Computer> runUntilMatch() {
-        var state = this;
-        var mismatch = false;
-        while(state.ip() <= state.program.size() - 2 && !mismatch) {
-            var opcode = state.program().get(state.ip());
-            var rawOperand = state.program().get(state.ip()+1);
+    public void printProgram() {
+        for(var i = 0; i < program.size(); i += 2) {
+            var opcode = program().get(i);
+            var rawOperand =program().get(i+1);
             var instruction = opcodesToInstructions.get(opcode);
-            var operand = instruction.parseOperand(rawOperand);
-            state = instruction.apply(operand, state);
-            //System.out.println(state);
-
-            if(instruction.equals(Instruction.out)) {
-                var sizeLimit = Math.min(state.output().size(), state.program().size());
-//                System.out.println(state.output().size() + " " + state.program().size());
-//                System.out.println("sizeLimit=" + sizeLimit);
-                for(var i = 0; i < sizeLimit && !mismatch; i++) {
-                    if(!state.output().get(i).equals(state.program().get(i))) {
-                        mismatch = true;
-                    }
-                }
-            }
-            if(!mismatch && state.output().size() == state.program().size()) {
-                return Optional.of(state);
-            }
+            System.out.println(instruction.name() + " " + rawOperand);
         }
-        return Optional.empty();
+    }
+
+    public void dump() {
+        System.out.printf("A=%s B=%s C=%s out=%s%n",
+                Long.toBinaryString(a),
+                Long.toBinaryString(b),
+                Long.toBinaryString(c),
+                output());
     }
 }
 

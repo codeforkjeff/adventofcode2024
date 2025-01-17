@@ -195,3 +195,21 @@ I suppose slogging through it was worth the insight into how mathematical additi
 
 Anyway, day 17 part 2 is the last remaining puzzle for me. Like day 24, it involves implementing a computer. Ugh,
 I dislike these types of problems so much.
+
+### 1/16/2025
+
+I owe the solution to day 17 part 2 entirely to my friend [Rob](https://github.com/robabrazado/adventofcode2024/)
+and discussions I found on reddit.
+
+It may be that there's only one viable approach to this problem, as every single solution I looked at
+did it pretty much the same way, by analyzing what the program in the puzzle input actually did. I'm fairly sure
+there's no "generic" solution, since not every program is a quine.
+
+I wrote up my own understanding of the solution in comments in the code.
+
+This was my least favorite puzzle by far. Finishing days 24 and 17 last is pretty good evidence I suck at looking
+for patterns in machine instructions and logic gates.
+
+But now I'm FINISHED! It's a great feeling, especially after not being able to complete AoC 2018.
+
+I'll write up a post-mortem in a few days.
