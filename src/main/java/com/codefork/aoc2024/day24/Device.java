@@ -362,11 +362,12 @@ public record Device(Map<String, Wire> namesToWires) {
     public List<Pair> findSwapsToMakeAdder() {
 
         // create test devices with randomized x and y values.
-        // if number of devices is too low, we'll get misleading choices for "best" swaps
-        List<Device> initialTestDevices = IntStream
+        // if number of devices is too low, we'll get misleading choices for "best" swaps.
+        // collect into a set first to ensure uniqueness; duplicate test devices cause errors later
+        List<Device> initialTestDevices = new ArrayList<>(IntStream
                 .range(0, 100)
                 .mapToObj(i -> i == 0 ? this : randomizeXandY())
-                .toList();
+                .collect(Collectors.toSet()));
 
         // keep a running list of ever-improving swap sets
         List<List<Pair>> swapSets = new ArrayList<>();
