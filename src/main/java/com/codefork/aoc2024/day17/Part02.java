@@ -1,10 +1,10 @@
 package com.codefork.aoc2024.day17;
 
 import com.codefork.aoc2024.Problem;
-import com.codefork.aoc2024.util.Assert;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 /**
@@ -30,39 +30,32 @@ import java.util.stream.Stream;
  */
 public class Part02 extends Problem {
 
+    public long findLowestAForQuine(Computer computer, int i, List<Long> candidates) {
+        if(i >= 0) {
+            var expectedOutput = computer.program().subList(i, computer.program().size());
+            var newCandidates = candidates.stream()
+                    .flatMap(candidate ->
+                            IntStream.range(0, 8).boxed().flatMap(threeBits -> {
+                                var testA = (candidate << 3) + threeBits;
+                                var testComputer = computer.withA(testA).run();
+                                return testComputer.output().equals(expectedOutput) ? Stream.of(testA) : Stream.empty();
+                            }))
+                    .toList();
+            return findLowestAForQuine(computer, i-1, newCandidates);
+        } else {
+            return candidates.stream().mapToLong(n -> n).min().orElseThrow();
+        }
+    }
+
     public String solve(Stream<String> data) {
         var initialComputer = Computer.parse(data);
-        var programSize = initialComputer.program().size();
 
-        var i = programSize - 1;
-        List<Integer> expectedOutput = new ArrayList<>();
-        List<Long> candidates = new ArrayList<>();
-        candidates.add(0L);
+        var i = initialComputer.program().size() - 1;
+        List<Long> candidates = List.of(0L);
 
-        while (i >= 0) {
-            expectedOutput.addFirst(initialComputer.program().get(i));
+        var lowestA = findLowestAForQuine(initialComputer, i, candidates);
 
-            List<Long> newCandidates = new ArrayList<>();
-
-            //System.out.println("looking for next expected output=" + expectedOutput);
-
-            for(var candidate : candidates) {
-                for(var threeBits = 0; threeBits < 8; threeBits++) {
-                    var testA = (candidate << 3) + threeBits;
-                    var testComputer = initialComputer.withA(testA);
-                    var finalState = testComputer.run();
-                    if(finalState.output().equals(expectedOutput)) {
-                        newCandidates.add(testA);
-                    }
-                }
-            }
-            candidates = newCandidates;
-            //System.out.println("candidates=" + candidates);
-            i--;
-        }
-
-        var lowest = candidates.stream().mapToLong(n -> n).min().orElseThrow();
-        return String.valueOf(lowest);
+        return String.valueOf(lowestA);
     }
 
     @Override
