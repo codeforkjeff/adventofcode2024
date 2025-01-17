@@ -187,7 +187,7 @@ identify what the configuration of the full adder should look like for each z wi
 I ended up implementing [a solution by someone](https://www.reddit.com/r/adventofcode/comments/1hneuf0/comment/m41ms44/)
 who used a brute force approach I thought was pretty clever: set up a bunch of test devices with randomized x and y
 values, find a swap that results in the most improvement for all of them, and repeat until you find the set of 4 swaps
-that works for every test device. After adding caching to the evaluation of wire values, my solution ran in only 35s
+that works for every test device. After adding caching to the evaluation of wire values, my solution ran in only 30s
 (the author reported it taking 2.5 mins on their machine). More details are in the code.
 
 I suppose slogging through it was worth the insight into how mathematical addition works at the level of logical gates

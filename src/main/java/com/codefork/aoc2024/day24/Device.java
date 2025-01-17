@@ -16,7 +16,11 @@ import java.util.stream.Stream;
 
 import static com.codefork.aoc2024.util.FoldLeft.foldLeft;
 
-public record Device(Map<String, Wire> namesToWires) {
+public record Device(Map<String, Wire> namesToWires, List<String> zIndices) {
+
+    public Device(Map<String, Wire> namesToWires) {
+        this(namesToWires, getIndices(namesToWires, 'z'));
+    }
 
     /**
      * Evaluates wires in a device. This has a cache, which makes evaluating
@@ -131,7 +135,7 @@ public record Device(Map<String, Wire> namesToWires) {
         var wire2 = newNamesToWires.get(name2);
         newNamesToWires.put(name1, wire2);
         newNamesToWires.put(name2, wire1);
-        return new Device(newNamesToWires);
+        return new Device(newNamesToWires, zIndices);
     }
 
     /**
@@ -197,8 +201,8 @@ public record Device(Map<String, Wire> namesToWires) {
      * returns two-digit strings ("00", "01", etc.) for the wires with
      * the specific character prefix
      */
-    public List<String> getIndices(char prefix) {
-        return namesToWires().keySet().stream()
+    public static List<String> getIndices(Map<String, Wire> namesToWires, char prefix) {
+        return namesToWires.keySet().stream()
                 .filter(name -> name.charAt(0) == prefix)
                 .map(name -> name.substring(1, 3))
                 .sorted()
@@ -215,10 +219,11 @@ public record Device(Map<String, Wire> namesToWires) {
      * @return
      */
     public List<String> validateAddition(boolean debug) {
+        var xIndices = zIndices.subList(0, zIndices.size() - 1);
         var eval = new Evaluator(this);
         long x = 0L;
         long y = 0L;
-        for (var pos : getIndices('x').reversed()) {
+        for (var pos : xIndices.reversed()) {
             var xWire = eval.get("x" + pos);
             x = (x << 1) + xWire;
             var yWire = eval.get("y" + pos);
@@ -231,7 +236,7 @@ public record Device(Map<String, Wire> namesToWires) {
             System.out.printf(" sum=%s (%s)%n", sum, Long.toBinaryString(sum));
         }
 
-        return getIndices('z').stream()
+        return zIndices.stream()
                 .flatMap(pos -> {
                     var z = eval.get("z" + pos);
                     var expected = (sum >> Integer.parseInt(pos)) & 1;
@@ -297,13 +302,14 @@ public record Device(Map<String, Wire> namesToWires) {
      * returns a new Device with randomized values in the x and y wires
      */
     public Device randomizeXandY() {
+        var xIndices = zIndices.subList(0, zIndices.size() - 1);
         Map<String, Wire> newMap = new HashMap<>(namesToWires());
         var random = new Random();
-        for (var pos : getIndices('x')) {
+        for (var pos : xIndices) {
             newMap.put("x" + pos, new Device.LiteralValue(Math.abs(random.nextInt()) % 2));
             newMap.put("y" + pos, new Device.LiteralValue(Math.abs(random.nextInt()) % 2));
         }
-        return new Device(newMap);
+        return new Device(newMap, zIndices);
     }
 
     public static String formatAnswer(List<Pair> swaps) {
