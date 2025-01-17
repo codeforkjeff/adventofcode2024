@@ -15,7 +15,7 @@ public class Part02 extends Problem {
         // a few false positives before yielding the answer, so it was just a matter of increasing
         // the threshold to something reasonable once I knew what the Christmas tree actually looked like.
 
-        System.out.println("This takes ~40 seconds");
+        printTimeNotice("40s");
         var swarm = Swarm.create(data, width, height);
         var keepGoing = true;
         var i = 0;

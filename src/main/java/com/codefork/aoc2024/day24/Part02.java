@@ -7,7 +7,7 @@ import java.util.stream.Stream;
 public class Part02 extends Problem {
 
     public String solve(Stream<String> data) {
-        System.out.println("This takes ~30s to run");
+        printTimeNotice("30s");
         var device = Device.parse(data);
         return Device.formatAnswer(device.findSwapsToMakeAdder());
     }

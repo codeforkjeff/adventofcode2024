@@ -9,6 +9,8 @@ import java.util.stream.Stream;
 
 public abstract class Problem {
 
+    public static String CPU = "Ryzen 5850U";
+
     /**
      * Solve this problem
      */
@@ -64,6 +66,10 @@ public abstract class Problem {
      */
     public Stream<String> getSampleInput() {
         return getFileAsStream("sample");
+    }
+
+    public void printTimeNotice(String time) {
+        System.out.printf("TODO: This takes ~%s to run (on a %s), needs to be optimized%n", time, CPU);
     }
 
     /**

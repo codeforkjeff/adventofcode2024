@@ -37,7 +37,7 @@ public class Part02 extends Problem {
     @Override
     public String solve() {
         //return solve(getSampleInput(), true);
-        System.out.println("TODO: This takes ~25s to run, needs to be optimized");
+        printTimeNotice("25s");
         return solve(getInput(), false);
     }
 
